@@ -1,5 +1,8 @@
 import { DataSource } from "typeorm"
 
+/* Entities */
+import { User } from "./modules/User/entities/User.entity"
+
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: "localhost",
@@ -9,7 +12,7 @@ export const AppDataSource = new DataSource({
     database: "kcrm-bank",
     synchronize: true,
     logging: true,
-    entities: [],
+    entities: [User],
     subscribers: [],
     migrations: [],
 })
