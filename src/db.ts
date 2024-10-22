@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { User } from "./entities/User.entity";
 import { UserType } from "./entities/UserType.entity";
 import { Product } from "./entities/Product.entity";
+import { Sale } from "./entities/Sale.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
   database: "kcrm-bank",
   synchronize: true,
   logging: true,
-  entities: [User, Product, UserType],
+  entities: [User, Product, UserType, Sale],
   subscribers: [],
   migrations: [],
 });

@@ -6,10 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  BaseEntity
+  BaseEntity,
+  OneToMany
 } from "typeorm";
 
 import { Exclude } from "class-transformer";
+
+import { Sale } from "./Sale.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -54,4 +57,7 @@ export class User extends BaseEntity {
   @ManyToOne(() => User, (user) => user.userType)
   @JoinColumn({ name: 'user_type' })
   userType: number;
+
+  @OneToMany(() => Sale, (sale) => sale.user)
+  sales: Sale[];
 }

@@ -43,7 +43,7 @@ import {
     deleted: boolean;
 
     /************** RELATIONS **************/
-    @OneToMany(() => User, (users) => users.userType)
+    @OneToMany(() => User, (user) => user.userType)
     users: User[];
   }
   

@@ -4,19 +4,22 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
+  JoinColumn,
   BaseEntity,
 } from "typeorm";
 
-import { Sale } from "./Sale.entity";
+import { Product } from "./Product.entity";
+import { User } from "./User.entity";
 
 @Entity()
-export class Product extends BaseEntity {
+export class Sale extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: "50" })
-  name: string;
+  quotaRequested: number;
+
+  rate: number;
 
   @CreateDateColumn({
     name: "created_at",
@@ -32,17 +35,15 @@ export class Product extends BaseEntity {
   })
   updateAt: Date;
 
-  @Column({
-    name: "active",
-    type: "boolean",
-    default: true,
-  })
-  active: boolean;
-
   @Column({ type: "boolean", default: false })
   deleted: boolean;
 
   /************** RELATIONS **************/
-  @OneToMany(() => Sale, (sale) => sale.product)
-  sales: Sale[];
+  @ManyToOne(() => Product, (product) => product.sales)
+  @JoinColumn({ name: "product" })
+  product: number;
+
+  @ManyToOne(() => User, (user) => user.sales)
+  @JoinColumn({ name: "user"})
+  user: number
 }
