@@ -4,6 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
   BaseEntity
 } from "typeorm";
 
@@ -25,9 +27,6 @@ export class User extends BaseEntity {
   @Exclude()
   @Column({ type: "varchar", length: 255 })
   password: string;
-
-  @Column({ name: "user-type", nullable: false })
-  userType: UserType;
 
   @CreateDateColumn({
     name: "created_at",
@@ -52,4 +51,9 @@ export class User extends BaseEntity {
 
   @Column({ type: "boolean", default: false })
   deleted: boolean;
+
+  /************** RELATIONS **************/
+  @ManyToOne(() => User, (user) => user.userType)
+  @JoinColumn({ name: 'user_type' })
+  userType: number;
 }
