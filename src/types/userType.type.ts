@@ -1,1 +1,1 @@
-export type UserType = 'Admin' | "Adviser";
+export type UserType = 'Administrador' | "Asesor";
