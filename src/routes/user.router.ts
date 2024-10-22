@@ -4,43 +4,43 @@ const router = Router();
 
 /* Controllers */
 import {
-  createUser,
-  getUsers,
-  getUser,
-  updateUser,
-  updatePasswordUser,
-  activateUser,
-  deactivateUser,
+  create,
+  getAll,
+  get,
+  update,
+  updatePassword,
+  activate,
+  deactivate,
   deleteUser,
 } from "../controllers/user.controller";
 
 router.post("/users", (req, res) => {
-  createUser(req, res);
+  create(req, res);
 });
 
 router.get("/users", (req, res) => {
-  getUsers(req, res);
+  getAll(req, res);
 });
 
 router.put("/users/password/:id", (req, res) => {
-  updatePasswordUser(req, res);
+  updatePassword(req, res);
 });
 
 router.get("/users/:id", (req, res) => {
-  getUser(req, res);
+  get(req, res);
 });
 
 router.put("/users/:id", (req, res) => {
-  updateUser(req, res);
+  update(req, res);
 });
 
 
 router.put("/users/activate/:id", (req, res) => {
-  activateUser(req, res);
+  activate(req, res);
 });
 
 router.put("/users/deactivate/:id", (req, res) => {
-  deactivateUser(req, res);
+  deactivate(req, res);
 });
 
 router.delete("/users/:id", (req, res) => {
