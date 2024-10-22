@@ -49,10 +49,12 @@ export const update = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
     const { name, email, userType } = req.body;
-    user.name = name;
-    user.email = email;
-    user.userType = userType;
-    await user.save();
+    const body = {
+      name,
+      email,
+      userType,
+    };
+    User.update({id}, body)
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -67,8 +69,7 @@ export const updatePassword = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
     const { password } = req.body;
-    user.password = password;
-    await user.save();
+    await User.update({ id }, { password });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -82,8 +83,7 @@ export const activate = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
-    user.active = true;
-    await user.save();
+    await User.update({ id }, { active: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -97,8 +97,7 @@ export const deactivate = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
-    user.active = false;
-    await user.save();
+    await User.update({ id }, { active: false });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -113,8 +112,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     console.log(id);
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
-    user.deleted = true;
-    await user.save();
+    await User.update({ id }, { deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
