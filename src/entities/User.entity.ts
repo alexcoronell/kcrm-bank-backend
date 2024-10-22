@@ -11,8 +11,6 @@ import {
 
 import { Exclude } from "class-transformer";
 
-import { UserType } from "../types/userType.type";
-
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
