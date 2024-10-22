@@ -35,9 +35,13 @@ export const getAll = async (req: Request, res: Response) => {
 export const get = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
-    const user = await User.findOneBy({ id });
+    const user = await User.findOne({
+      where: {id},
+      relations: ['userType']
+    });
     if (!user) return res.status(404).json({ message: "User does not exist" });
-    return res.json(user);
+    const { password, ...rta } = user;
+    return res.json(rta);
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });

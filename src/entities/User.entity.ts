@@ -13,6 +13,7 @@ import {
 import { Exclude } from "class-transformer";
 
 import { Sale } from "./Sale.entity";
+import { UserType } from "./UserType.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -54,7 +55,7 @@ export class User extends BaseEntity {
   deleted: boolean;
 
   /************** RELATIONS **************/
-  @ManyToOne(() => User, (user) => user.userType)
+  @ManyToOne(() => UserType, (userType) => userType.users)
   @JoinColumn({ name: 'user_type' })
   userType: number;
 
