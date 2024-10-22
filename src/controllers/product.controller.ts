@@ -48,8 +48,7 @@ export const update = async (req: Request, res: Response) => {
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
     const { name } = req.body;
-    product.name = name;
-    await product.save();
+    await Product.update({ id }, { name });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -64,8 +63,7 @@ export const activate = async (req: Request, res: Response) => {
     const product = await Product.findOneBy({ id });
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
-    product.active = true;
-    await product.save();
+    await Product.update({ id }, { active: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -80,8 +78,7 @@ export const deactivate = async (req: Request, res: Response) => {
     const product = await Product.findOneBy({ id });
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
-    product.active = false;
-    await product.save();
+    await Product.update({ id }, { active: false });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -90,14 +87,13 @@ export const deactivate = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUserType = async (req: Request, res: Response) => {
+export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     const product = await Product.findOneBy({ id });
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
-    product.deleted = true;
-    await product.save();
+    await Product.update({ id }, { deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
