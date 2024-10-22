@@ -18,9 +18,11 @@ export class Sale extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({name: "quota_requested"})
   quotaRequested: number;
 
-  rate: number;
+  @Column()
+  rate: string;
 
   @CreateDateColumn({
     name: "created_at",
@@ -48,7 +50,11 @@ export class Sale extends BaseEntity {
   @JoinColumn({ name: "franchise" })
   franchise: number;
 
-  @ManyToOne(() => User, (user) => user.sales)
+  @ManyToOne(() => User, (user) => user.createdSales)
   @JoinColumn({ name: "user"})
-  user: number
+  createdBy: number
+
+  @ManyToOne(() => User, (user) => user.updatedSales)
+  @JoinColumn({ name: "user"})
+  updatedBy: number
 }

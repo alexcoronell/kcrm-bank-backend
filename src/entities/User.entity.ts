@@ -58,6 +58,9 @@ export class User extends BaseEntity {
   @JoinColumn({ name: 'user_type' })
   userType: number;
 
-  @OneToMany(() => Sale, (sale) => sale.user)
-  sales: Sale[];
+  @OneToMany(() => Sale, (sale) => sale.createdBy)
+  createdSales: Sale[];
+
+  @OneToMany(() => Sale, (sale) => sale.updatedBy)
+  updatedSales: Sale[];
 }

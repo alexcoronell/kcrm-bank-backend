@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.router";
 import userTypeRoutes from "./routes/userType.route";
 import productRoutes from "./routes/product.router";
 import franchiseRoutes from "./routes/franchise.router";
+import saleRoutes from "./routes/sale.route";
 
 const app = express();
 app.use(morgan("dev"));
@@ -16,5 +17,6 @@ app.use(userRoutes);
 app.use(userTypeRoutes);
 app.use(productRoutes);
 app.use(franchiseRoutes);
+app.use(saleRoutes);
 
 export default app;
