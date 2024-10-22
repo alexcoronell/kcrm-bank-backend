@@ -5,6 +5,7 @@ import { User } from "./entities/User.entity";
 import { UserType } from "./entities/UserType.entity";
 import { Product } from "./entities/Product.entity";
 import { Sale } from "./entities/Sale.entity";
+import { Franchise } from "./entities/Franchise.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: "kcrm-bank",
   synchronize: true,
   logging: true,
-  entities: [User, Product, UserType, Sale],
+  entities: [User, Product, UserType, Sale, Franchise],
   subscribers: [],
   migrations: [],
 });

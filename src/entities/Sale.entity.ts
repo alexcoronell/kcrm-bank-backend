@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 
 import { Product } from "./Product.entity";
+import { Franchise } from "./Franchise.entity";
 import { User } from "./User.entity";
 
 @Entity()
@@ -42,6 +43,10 @@ export class Sale extends BaseEntity {
   @ManyToOne(() => Product, (product) => product.sales)
   @JoinColumn({ name: "product" })
   product: number;
+
+  @ManyToOne(() => Franchise, (franchise) => franchise.sales)
+  @JoinColumn({ name: "franchise" })
+  franchise: number;
 
   @ManyToOne(() => User, (user) => user.sales)
   @JoinColumn({ name: "user"})
