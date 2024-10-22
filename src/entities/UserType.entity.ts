@@ -31,6 +31,13 @@ import {
       default: () => "CURRENT_TIMESTAMP",
     })
     updateAt: Date;
+
+    @Column({
+      name: "is_admin",
+      type: "boolean",
+      default: false,
+    })
+    isAdmin: boolean;
   
     @Column({
       name: "active",
