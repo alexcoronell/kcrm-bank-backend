@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import * as bcrypt from 'bcrypt';
 
 import { User } from "../entities/User.entity";
 
@@ -6,9 +7,10 @@ export const create = async (req: Request, res: Response) => {
   try {
     const { name, email, password, userType } = req.body;
     const user = new User();
+    const hashPassword = await bcrypt.hash(password, 10)
     user.name = name;
     user.email = email;
-    user.password = password;
+    user.password = hashPassword;
     user.userType = userType;
     await user.save();
     return res.json(user);
@@ -69,7 +71,8 @@ export const updatePassword = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
     const { password } = req.body;
-    await User.update({ id }, { password });
+    const hashPassword = await bcrypt.hash(password, 10)
+    await User.update({ id }, { password: hashPassword });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
