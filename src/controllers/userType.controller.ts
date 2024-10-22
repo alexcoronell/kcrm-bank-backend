@@ -48,6 +48,7 @@ export const update = async (req: Request, res: Response) => {
     if (!userType)
       return res.status(404).json({ message: "User Type does not exist" });
     const { name } = req.body;
+    userType.name = name;
     await userType.save();
     return res.sendStatus(204);
   } catch (e) {
