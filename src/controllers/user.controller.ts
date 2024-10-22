@@ -71,7 +71,7 @@ export const activateUser = async (req: Request, res: Response) => {
   return res.sendStatus(204);
 };
 
-export const inactivateUser = async (req: Request, res: Response) => {
+export const deactivateUser = async (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id);
   const user = await User.findOneBy({ id });
   if (!user) return res.status(404).json({ message: "User does not exist" });

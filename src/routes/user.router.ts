@@ -10,7 +10,7 @@ import {
   updateUser,
   updatePasswordUser,
   activateUser,
-  inactivateUser,
+  deactivateUser,
   deleteUser,
 } from "../controllers/user.controller";
 
@@ -39,8 +39,8 @@ router.put("/users/activate/:id", (req, res) => {
   activateUser(req, res);
 });
 
-router.put("/users/inactivate/:id", (req, res) => {
-  inactivateUser(req, res);
+router.put("/users/deactivate/:id", (req, res) => {
+  deactivateUser(req, res);
 });
 
 router.delete("/users/:id", (req, res) => {
