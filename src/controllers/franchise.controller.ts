@@ -6,7 +6,7 @@ export const create = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
     const franchise = new Franchise();
-    franchise.name = name;
+    franchise.name = name.toUpperCase();
     await franchise.save();
     return res.json(franchise);
   } catch (e) {
@@ -48,7 +48,7 @@ export const update = async (req: Request, res: Response) => {
     if (!franchise)
       return res.status(404).json({ message: "Franchise does not exist" });
     const { name } = req.body;
-    await Franchise.update({ id }, { name });
+    await Franchise.update({ id }, { name: name.toUpperCase() });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {

@@ -6,6 +6,7 @@ import cors from "cors";
 import userRoutes from "./routes/user.router";
 import userTypeRoutes from "./routes/userType.route";
 import productRoutes from "./routes/product.router";
+import franchiseRoutes from "./routes/franchise.router";
 
 const app = express();
 app.use(morgan("dev"));
@@ -14,5 +15,6 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(userTypeRoutes);
 app.use(productRoutes);
+app.use(franchiseRoutes);
 
 export default app;
