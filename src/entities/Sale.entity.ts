@@ -51,10 +51,10 @@ export class Sale extends BaseEntity {
   franchise: number;
 
   @ManyToOne(() => User, (user) => user.createdSales)
-  @JoinColumn({ name: "user"})
+  @JoinColumn({ name: "created_by_user"})
   createdBy: number
 
   @ManyToOne(() => User, (user) => user.updatedSales)
-  @JoinColumn({ name: "user"})
+  @JoinColumn({ name: "updated_by_user"})
   updatedBy: number
 }
