@@ -4,17 +4,20 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity
 } from "typeorm";
 
 import { Exclude } from "class-transformer";
 
+import { UserType } from "../types/userType.type";
+
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: "varchar", length: "50" })
-  username: string;
+  name: string;
 
   @Column({ type: "varchar", length: 50 })
   email: string;
@@ -49,9 +52,4 @@ export class User {
 
   @Column({ type: "boolean", default: false })
   deleted: boolean;
-}
-
-enum UserType {
-  "admin",
-  "adviser",
 }
