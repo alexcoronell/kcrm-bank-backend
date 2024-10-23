@@ -16,10 +16,26 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+export const countTotal = async (req: Request, res: Response) => {
+  try {
+    const total = await Franchise.count({
+      where: { deleted: false },
+    });
+    return res.status(200).json(total);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).json({ message: e.message });
+    }
+  }
+};
+
 export const getAll = async (req: Request, res: Response) => {
   try {
-    const franchises = await Franchise.find();
-    return res.json(franchises);
+    const franchises = await Franchise.find({
+      where: { deleted: false },
+      order: { name: "ASC" },
+    });
+    return res.status(200).json(franchises);
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
