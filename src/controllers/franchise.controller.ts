@@ -63,8 +63,8 @@ export const update = async (req: Request, res: Response) => {
     const franchise = await Franchise.findOneBy({ id });
     if (!franchise)
       return res.status(404).json({ message: "Franchise does not exist" });
-    const { name } = req.body;
-    await Franchise.update({ id }, { name: name.toUpperCase() });
+    const { name, active } = req.body;
+    await Franchise.update({ id }, { name: name.toUpperCase(), active });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -73,37 +73,7 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-export const activate = async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    const franchise = await Franchise.findOneBy({ id });
-    if (!franchise)
-      return res.status(404).json({ message: "Franchise does not exist" });
-    await Franchise.update({ id }, { active: true });
-    return res.sendStatus(204);
-  } catch (e) {
-    if (e instanceof Error) {
-      return res.status(500).json({ message: e.message });
-    }
-  }
-};
-
-export const deactivate = async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    const franchise = await Franchise.findOneBy({ id });
-    if (!franchise)
-      return res.status(404).json({ message: "Franchise does not exist" });
-    await Franchise.update({ id }, { active: false });
-    return res.sendStatus(204);
-  } catch (e) {
-    if (e instanceof Error) {
-      return res.status(500).json({ message: e.message });
-    }
-  }
-};
-
-export const deleteFranchise = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     const franchise = await Franchise.findOneBy({ id });
