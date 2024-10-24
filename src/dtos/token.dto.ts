@@ -1,3 +1,3 @@
-export class TokenDto {
+export interface TokenDto {
   refresh: string;
 }
