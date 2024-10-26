@@ -8,7 +8,7 @@ export const create = async (req: Request, res: Response) => {
     const franchise = new Franchise();
     franchise.name = name.toUpperCase();
     await franchise.save();
-    return res.json(franchise);
+    return res.status(201).json(franchise);
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });

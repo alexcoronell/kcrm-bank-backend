@@ -8,7 +8,20 @@ export const create = async (req: Request, res: Response) => {
     const userType = new UserType();
     userType.name = name;
     await userType.save();
-    return res.json(userType);
+    return res.status(201).json(userType);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).json({ message: e.message });
+    }
+  }
+};
+
+export const countTotal = async (req: Request, res: Response) => {
+  try {
+    const total = await UserType.count({
+      where: { deleted: false },
+    });
+    return res.status(200).json(total);
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
@@ -18,8 +31,10 @@ export const create = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
   try {
-    const userTypes = await UserType.find();
-    return res.json(userTypes);
+    const userTypes = await UserType.find({
+      where: { deleted: false}
+    });
+    return res.status(200).json(userTypes);
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
@@ -58,43 +73,13 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-export const activate = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     const userType = await UserType.findOneBy({ id });
     if (!userType)
       return res.status(404).json({ message: "User Type does not exist" });
-    await UserType.update({ id }, { active: true });
-    return res.sendStatus(204);
-  } catch (e) {
-    if (e instanceof Error) {
-      return res.status(500).json({ message: e.message });
-    }
-  }
-};
-
-export const deactivate = async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    const userType = await UserType.findOneBy({ id });
-    if (!userType)
-      return res.status(404).json({ message: "User Type does not exist" });
-    await UserType.update({ id }, { active: true });
-    return res.sendStatus(204);
-  } catch (e) {
-    if (e instanceof Error) {
-      return res.status(500).json({ message: e.message });
-    }
-  }
-};
-
-export const deleteUserType = async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    const userType = await UserType.findOneBy({ id });
-    if (!userType)
-      return res.status(404).json({ message: "User Type does not exist" });
-    await UserType.update({ id }, { active: true });
+    await UserType.update({ id }, { deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
