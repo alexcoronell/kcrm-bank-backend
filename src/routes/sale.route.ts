@@ -8,7 +8,7 @@ import {
   getAll,
   get,
   update,
-  deleteSale,
+  remove,
 } from "../controllers/sale.controller";
 
 const baseRoute = "sales";
@@ -30,7 +30,7 @@ router.put(`/${baseRoute}/:id`, (req, res) => {
 });
 
 router.delete(`/${baseRoute}/:id`, (req, res) => {
-  deleteSale(req, res);
+  remove(req, res);
 });
 
 export default router;

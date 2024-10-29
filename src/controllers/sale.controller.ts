@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 
+/* Entities */
 import { Sale } from "../entities/Sale.entity";
+
+/* Helpers */
+import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -22,9 +26,19 @@ export const create = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
+  const { take, skip } = pagination(req);
+
   try {
-    const sales = await Sale.find();
-    return res.json(sales);
+    const sales = await Sale.findAndCount({
+      where: { deleted: false },
+      order: { id: "DESC" },
+      relations: ["franchise", "created_by_user", "updated_by_user"],
+      take,
+      skip,
+    });
+    const [items, count] = sales;
+
+    return res.status(200).json({ items, count });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
@@ -52,9 +66,13 @@ export const update = async (req: Request, res: Response) => {
     if (!sale) return res.status(404).json({ message: "Sale does not exist" });
     const { quotaRequested, rate, product, franchise, user } = req.body;
     const body = {
-      quotaRequested, rate, product, franchise, updatedBy: user
+      quotaRequested,
+      rate,
+      product,
+      franchise,
+      updatedBy: user,
     };
-    Sale.update({id}, body)
+    Sale.update({ id }, body);
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
@@ -63,7 +81,7 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteSale = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     console.log(id);

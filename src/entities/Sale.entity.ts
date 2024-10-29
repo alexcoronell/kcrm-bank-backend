@@ -9,15 +9,20 @@ import {
   BaseEntity,
 } from "typeorm";
 
+/* Entities */
 import { Franchise } from "./Franchise.entity";
 import { User } from "./User.entity";
 
+/* Enums */
 import { Product } from "../enums/Product.enum";
 
 @Entity()
 export class Sale extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+ 
+  @Column({ nullable: false, type: "enum", enum: Product })
+  product: number;
 
   @Column({ name: "quota_requested" })
   quotaRequested: number;
@@ -43,9 +48,6 @@ export class Sale extends BaseEntity {
   deleted: boolean;
 
   /************** RELATIONS **************/
-  @Column({ nullable: false, type: "enum", enum: Product })
-  product: number;
-
   @ManyToOne(() => Franchise, (franchise) => franchise.sales)
   @JoinColumn({ name: "franchise" })
   franchise: number;
