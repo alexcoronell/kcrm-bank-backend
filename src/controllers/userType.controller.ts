@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 
+/* Entities */
 import { UserType } from "../entities/UserType.entity";
+
+/* Helpers */
+import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -30,11 +34,17 @@ export const countTotal = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
+  const { take, skip } = pagination(req);
+
   try {
     const userTypes = await UserType.find({
-      where: { deleted: false}
+      where: { deleted: false },
+      order: { name: "ASC" },
+      take,
+      skip,
     });
-    return res.status(200).json(userTypes);
+    const [items, count] = userTypes;
+    return res.status(200).json({ items, count });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });

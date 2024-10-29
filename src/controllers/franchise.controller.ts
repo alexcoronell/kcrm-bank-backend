@@ -33,7 +33,7 @@ export const countTotal = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
-  const { take, skip } = pagination(req)
+  const { take, skip } = pagination(req);
 
   try {
     const franchises = await Franchise.findAndCount({
@@ -42,9 +42,8 @@ export const getAll = async (req: Request, res: Response) => {
       take,
       skip,
     });
-    const [items, total] = franchises;
-    console.log(total);
-    return res.status(200).json({ items, total });
+    const [items, count] = franchises;
+    return res.status(200).json({ items, count });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
