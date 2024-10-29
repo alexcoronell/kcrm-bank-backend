@@ -8,9 +8,10 @@ import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const { name } = req.body;
+    const { name, isAdmin } = req.body;
     const userType = new UserType();
     userType.name = name;
+    userType.isAdmin = isAdmin;
     await userType.save();
     return res.status(201).json(userType);
   } catch (e) {
@@ -37,7 +38,7 @@ export const getAll = async (req: Request, res: Response) => {
   const { take, skip } = pagination(req);
 
   try {
-    const userTypes = await UserType.find({
+    const userTypes = await UserType.findAndCount({
       where: { deleted: false },
       order: { name: "ASC" },
       take,
@@ -71,10 +72,9 @@ export const update = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     const userType = await UserType.findOneBy({ id });
     if (!userType)
-      return res.status(404).json({ message: "User Type does not exist" });
-    const { name } = req.body;
-    await UserType.update({ id }, { name });
-    await userType.save();
+      return res.status(404).json({ message: "UserType does not exist" });
+    const { name, isAdmin, active } = req.body;
+    await UserType.update({ id }, { name, isAdmin, active });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
