@@ -30,14 +30,20 @@ export const countTotal = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const take = parseInt(req.query.limit as string) || 10;
+  const skip = (page - 1) * take;
+
   try {
     const franchises = await Franchise.findAndCount({
       where: { deleted: false },
-      order: { name: "ASC" },
+      order: { id: "DESC" },
+      take,
+      skip,
     });
     const [items, total] = franchises;
-    console.log(total)
-    return res.status(200).json({items, total});
+    console.log(total);
+    return res.status(200).json({ items, total });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
