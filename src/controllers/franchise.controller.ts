@@ -31,11 +31,13 @@ export const countTotal = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
   try {
-    const franchises = await Franchise.find({
+    const franchises = await Franchise.findAndCount({
       where: { deleted: false },
       order: { name: "ASC" },
     });
-    return res.status(200).json(franchises);
+    const [items, total] = franchises;
+    console.log(total)
+    return res.status(200).json({items, total});
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
