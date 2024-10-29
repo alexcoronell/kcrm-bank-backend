@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import * as bcrypt from "bcrypt";
 
+/* Entities */
 import { User } from "../entities/User.entity";
+
+/* Helpers */
+import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -22,12 +26,17 @@ export const create = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
+  const { take, skip } = pagination(req);
   try {
-    const users = await User.find({
+    const users = await User.findAndCount({
       relations: ["userType"],
       where: { deleted: false },
+      order: { id: "DESC" },
+      take,
+      skip,
     });
-    return res.json(users);
+    const [items, count] = users;
+    return res.status(200).json({ items, count });
   } catch (e) {
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
