@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 
+/* Entities */
 import { Franchise } from "../entities/Franchise.entity";
 
+/* Helpers */
+import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
@@ -30,9 +33,7 @@ export const countTotal = async (req: Request, res: Response) => {
 };
 
 export const getAll = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string) || 1;
-  const take = parseInt(req.query.limit as string) || 10;
-  const skip = (page - 1) * take;
+  const { take, skip } = pagination(req)
 
   try {
     const franchises = await Franchise.findAndCount({
