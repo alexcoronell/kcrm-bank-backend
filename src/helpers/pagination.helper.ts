@@ -1,12 +1,11 @@
-import { Request } from "express";
+import type { Request } from "express";
 
 const pagination = (req: Request) => {
-    const page = parseInt(req.query.page as string) || 1;
-    const take = parseInt(req.query.limit as string) || 10;
-    const skip = (page - 1) * take;
+	const page = Number.parseInt(req.query.page as string) || 1;
+	const take = Number.parseInt(req.query.limit as string) || 10;
+	const skip = (page - 1) * take;
 
-    return { take, skip }
-}
-
+	return { take, skip };
+};
 
 export default pagination;

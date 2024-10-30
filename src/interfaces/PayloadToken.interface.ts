@@ -1,4 +1,4 @@
 export interface PayloadToken {
-    user: number;
-    isAdmin: boolean;
+	user: number;
+	isAdmin: boolean;
 }

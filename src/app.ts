@@ -1,21 +1,21 @@
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-import cors from "cors";
-import cookieParser from 'cookie-parser';
-import 'dotenv/config'
+import "dotenv/config";
 
 /* Routes */
+import franchiseRoutes from "./routes/franchise.router";
+import loginRoutes from "./routes/login.router";
+import saleRoutes from "./routes/sale.route";
 import userRoutes from "./routes/user.router";
 import userTypeRoutes from "./routes/userType.route";
-import franchiseRoutes from "./routes/franchise.router";
-import saleRoutes from "./routes/sale.route";
-import loginRoutes from "./routes/login.router";
 
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(userRoutes);
 app.use(userTypeRoutes);
 app.use(franchiseRoutes);

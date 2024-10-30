@@ -1,3 +1,3 @@
 export interface TokenDto {
-  refresh: string;
+	refresh: string;
 }

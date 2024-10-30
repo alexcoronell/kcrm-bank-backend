@@ -1,12 +1,12 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-  BaseEntity,
+	BaseEntity,
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from "typeorm";
 
 /* Entities */
@@ -18,45 +18,54 @@ import { Product } from "../enums/Product.enum";
 
 @Entity()
 export class Sale extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
- 
-  @Column({ nullable: false, type: "enum", enum: Product })
-  product: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column({ name: "quota_requested" })
-  quotaRequested: number;
+	@Column({ nullable: false, type: "enum", enum: Product })
+	product: number;
 
-  @Column()
-  rate: string;
+	@Column({ name: "quota_requested" })
+	quotaRequested: number;
 
-  @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  createAt: Date;
+	@Column()
+	rate: string;
 
-  @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  updateAt: Date;
+	@CreateDateColumn({
+		name: "created_at",
+		type: "timestamp",
+		default: () => "CURRENT_TIMESTAMP",
+	})
+	createAt: Date;
 
-  @Column({ type: "boolean", default: false })
-  deleted: boolean;
+	@UpdateDateColumn({
+		name: "updated_at",
+		type: "timestamp",
+		default: () => "CURRENT_TIMESTAMP",
+	})
+	updateAt: Date;
 
-  /************** RELATIONS **************/
-  @ManyToOne(() => Franchise, (franchise) => franchise.sales)
-  @JoinColumn({ name: "franchise" })
-  franchise: number;
+	@Column({ type: "boolean", default: false })
+	deleted: boolean;
 
-  @ManyToOne(() => User, (user) => user.createdSales)
-  @JoinColumn({ name: "created_by_user" })
-  createdBy: number;
+	/************** RELATIONS **************/
+	@ManyToOne(
+		() => Franchise,
+		(franchise) => franchise.sales,
+	)
+	@JoinColumn({ name: "franchise" })
+	franchise: number;
 
-  @ManyToOne(() => User, (user) => user.updatedSales)
-  @JoinColumn({ name: "updated_by_user" })
-  updatedBy: number;
+	@ManyToOne(
+		() => User,
+		(user) => user.createdSales,
+	)
+	@JoinColumn({ name: "created_by_user" })
+	createdBy: number;
+
+	@ManyToOne(
+		() => User,
+		(user) => user.updatedSales,
+	)
+	@JoinColumn({ name: "updated_by_user" })
+	updatedBy: number;
 }
