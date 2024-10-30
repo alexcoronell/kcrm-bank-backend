@@ -14,15 +14,12 @@ import { Franchise } from "./Franchise.entity";
 import { User } from "./User.entity";
 
 /* Enums */
-import { Product } from "../enums/Product.enum";
+import { Product } from "./Product.entity";
 
 @Entity()
 export class Sale extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
-
-	@Column({ nullable: false, type: "enum", enum: Product })
-	product: number;
 
 	@Column({ name: "quota_requested" })
 	quotaRequested: number;
@@ -49,6 +46,13 @@ export class Sale extends BaseEntity {
 
 	/************** RELATIONS **************/
 	@ManyToOne(
+		() => User,
+		(user) => user.updatedSales,
+	)
+	@JoinColumn({ name: "updated_by_user" })
+	updatedBy: number;
+
+	@ManyToOne(
 		() => Franchise,
 		(franchise) => franchise.sales,
 	)
@@ -63,9 +67,9 @@ export class Sale extends BaseEntity {
 	createdBy: number;
 
 	@ManyToOne(
-		() => User,
-		(user) => user.updatedSales,
+		() => Product,
+		(product) => product.sales,
 	)
-	@JoinColumn({ name: "updated_by_user" })
-	updatedBy: number;
+	@JoinColumn({ name: "product" })
+	product: number;
 }
