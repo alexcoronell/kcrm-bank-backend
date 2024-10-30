@@ -32,7 +32,7 @@ export const getAll = async (req: Request, res: Response) => {
 		const sales = await Sale.findAndCount({
 			where: { deleted: false },
 			order: { id: "DESC" },
-			relations: ["franchise", "created_by_user", "updated_by_user"],
+			relations: ["franchise", "createdBy", "updatedBy"],
 			take,
 			skip,
 		});
