@@ -7,6 +7,7 @@ import {
   create,
   countTotal,
   getAll,
+  getAllSimple,
   get,
   update,
   remove,
@@ -20,6 +21,10 @@ router.post(`/${baseRoute}`, (req, res) => {
 
 router.get(`/${baseRoute}`, (req, res) => {
   getAll(req, res);
+});
+
+router.get(`/${baseRoute}/simple`, (req, res) => {
+  getAllSimple(req, res);
 });
 
 router.get(`/${baseRoute}/count`, (req, res) => {

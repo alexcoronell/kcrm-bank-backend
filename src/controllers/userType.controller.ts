@@ -53,6 +53,21 @@ export const getAll = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllSimple = async (req: Request, res: Response) => {
+  try {
+    const userTypes = await UserType.find({
+      select: ['id', 'name'],
+      where: { deleted: false, active: true },
+      order: { name: "ASC" },
+    });
+    return res.status(200).json(userTypes);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).json({ message: e.message });
+    }
+  }
+};
+
 export const get = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
