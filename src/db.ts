@@ -9,11 +9,11 @@ import { UserType } from "./entities/UserType.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "postgres",
-  password: "root",
-  database: "kcrm-bank",
+  host: process.env.HOST,
+  port: Number.parseInt(process.env.PORT as string),
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE_NAME,
   synchronize: true,
   logging: true,
   entities: [Franchise, Product, User, UserType, Sale],
