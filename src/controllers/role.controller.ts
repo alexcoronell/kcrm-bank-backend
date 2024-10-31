@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
 /* Entities */
-import { UserType } from "../entities/UserType.entity";
+import { Role } from "../entities/Role.entity";
 
 /* Helpers */
 import pagination from "../helpers/pagination.helper";
@@ -9,11 +9,11 @@ import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
 	try {
 		const { name, isAdmin } = req.body;
-		const userType = new UserType();
-		userType.name = name;
-		userType.isAdmin = isAdmin;
-		await userType.save();
-		return res.status(201).json(userType);
+		const role = new Role();
+		role.name = name;
+		role.isAdmin = isAdmin;
+		await role.save();
+		return res.status(201).json(role);
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });
@@ -23,7 +23,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const countTotal = async (req: Request, res: Response) => {
 	try {
-		const total = await UserType.count({
+		const total = await Role.count({
 			where: { deleted: false },
 		});
 		return res.status(200).json(total);
@@ -38,13 +38,13 @@ export const getAll = async (req: Request, res: Response) => {
 	const { take, skip } = pagination(req);
 
 	try {
-		const userTypes = await UserType.findAndCount({
+		const role = await Role.findAndCount({
 			where: { deleted: false },
 			order: { name: "ASC" },
 			take,
 			skip,
 		});
-		const [items, count] = userTypes;
+		const [items, count] = role;
 		return res.status(200).json({ items, count });
 	} catch (e) {
 		if (e instanceof Error) {
@@ -55,12 +55,12 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getAllSimple = async (req: Request, res: Response) => {
 	try {
-		const userTypes = await UserType.find({
+		const role = await Role.find({
 			select: ["id", "name"],
 			where: { deleted: false, active: true },
 			order: { name: "ASC" },
 		});
-		return res.status(200).json(userTypes);
+		return res.status(200).json(role);
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });
@@ -71,10 +71,10 @@ export const getAllSimple = async (req: Request, res: Response) => {
 export const get = async (req: Request, res: Response) => {
 	try {
 		const id: number = Number.parseInt(req.params.id);
-		const userType = await UserType.findOneBy({ id });
-		if (!userType)
-			return res.status(404).json({ message: "User Type does not exist" });
-		return res.json(userType);
+		const role = await Role.findOneBy({ id });
+		if (!role)
+			return res.status(404).json({ message: "Role does not exist" });
+		return res.json(role);
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });
@@ -85,11 +85,11 @@ export const get = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
 	try {
 		const id: number = Number.parseInt(req.params.id);
-		const userType = await UserType.findOneBy({ id });
-		if (!userType)
-			return res.status(404).json({ message: "UserType does not exist" });
+		const role = await Role.findOneBy({ id });
+		if (!role)
+			return res.status(404).json({ message: "Role does not exist" });
 		const { name, isAdmin, active } = req.body;
-		await UserType.update({ id }, { name, isAdmin, active });
+		await Role.update({ id }, { name, isAdmin, active });
 		return res.sendStatus(204);
 	} catch (e) {
 		if (e instanceof Error) {
@@ -101,10 +101,10 @@ export const update = async (req: Request, res: Response) => {
 export const remove = async (req: Request, res: Response) => {
 	try {
 		const id: number = Number.parseInt(req.params.id);
-		const userType = await UserType.findOneBy({ id });
-		if (!userType)
+		const role = await Role.findOneBy({ id });
+		if (!role)
 			return res.status(404).json({ message: "User Type does not exist" });
-		await UserType.update({ id }, { deleted: true });
+		await Role.update({ id }, { deleted: true });
 		return res.sendStatus(204);
 	} catch (e) {
 		if (e instanceof Error) {

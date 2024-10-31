@@ -14,8 +14,8 @@ import {
 import { Exclude } from "class-transformer";
 
 import { Sale } from "./Sale.entity";
-import { UserType } from "./UserType.entity";
-import { IsBoolean, IsEmail, IsInt, isInt, IsNotEmpty, IsOptional, IsString, Min, MinLength } from "class-validator";
+import { Role } from "./Role.entity";
+import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min, MinLength } from "class-validator";
 
 @Entity()
 export class User extends BaseEntity {
@@ -25,7 +25,7 @@ export class User extends BaseEntity {
   @Column({ type: "varchar", length: "50" })
   @IsNotEmpty({message: "name is required"})
   @IsString()
-  readonly name: string;
+  name: string;
 
   @Column({ type: "varchar", length: 50 })
   @IsNotEmpty({message: "email is required"})
@@ -66,12 +66,9 @@ export class User extends BaseEntity {
   deleted: boolean;
 
   /************** RELATIONS **************/
-  @ManyToOne(() => UserType, (userType) => userType.users)
-  @JoinColumn({ name: "user_type" })
-  @IsNotEmpty()
-  @IsInt()
-  @Min(0)
-  userType: number;
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: "role" })
+  role: number;
 
   @OneToMany(() => Sale, (sale) => sale.createdBy)
   createdSales: Sale[];

@@ -10,8 +10,8 @@ import {
 
 import { User } from "./User.entity";
 
-@Entity({ name: "user_type" })
-export class UserType extends BaseEntity {
+@Entity()
+export class Role extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -52,7 +52,7 @@ export class UserType extends BaseEntity {
 	/************** RELATIONS **************/
 	@OneToMany(
 		() => User,
-		(user) => user.userType,
+		(user) => user.role,
 	)
 	users: User[];
 }

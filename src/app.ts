@@ -9,9 +9,9 @@ import "dotenv/config";
 import franchiseRouter from "./routes/franchise.router";
 import loginRouter from "./routes/login.router";
 import productRouter from "./routes/product.router";
+import roleRouter from "./routes/role.router";
 import saleRouter from "./routes/sale.router";
 import userRouter from "./routes/user.router";
-import userTypeRouter from "./routes/userType.router";
 
 const app = express();
 app.use(morgan("dev"));
@@ -22,8 +22,8 @@ app.use(cookieParser());
 app.use(franchiseRouter);
 app.use(loginRouter);
 app.use(productRouter);
+app.use(roleRouter);
 app.use(userRouter);
-app.use(userTypeRouter);
 app.use(saleRouter);
 
 export default app;

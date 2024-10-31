@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 /* Entities */
 import { User } from "../entities/User.entity";
-import type { UserType } from "../entities/UserType.entity";
+import type { Role } from "../entities/Role.entity";
 
 /* Models */
 import type { TokenDto } from "../dtos/token.dto";
@@ -19,7 +19,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({
-      relations: ["userType"],
+      relations: ["role"],
       where: { email, deleted: false, active: true },
     });
     if (!user) return res.status(404).json({ message: "Invalid Login" });
@@ -45,8 +45,8 @@ export const login = async (req: Request, res: Response) => {
 };
 
 const generateJWT = (user: User) => {
-  const { id, userType } = user;
-  const { isAdmin } = userType as unknown as UserType;
+  const { id, role } = user;
+  const { isAdmin } = role as unknown as Role;
   const expiresIn = 60;
   const payload = { user: id, isAdmin };
   const { password, ...publicUser } = user;

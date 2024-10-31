@@ -9,13 +9,13 @@ import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
 	try {
-		const { name, email, password, userType } = req.body;
+		const { name, email, password, role } = req.body;
 		const user = new User();
 		const hashPassword = await bcrypt.hash(password, 10);
 		user.name = name;
 		user.email = email;
 		user.password = hashPassword;
-		user.userType = userType;
+		user.role = role;
 		await user.save();
 		return res.json(user);
 	} catch (e) {
@@ -29,7 +29,7 @@ export const getAll = async (req: Request, res: Response) => {
 	const { take, skip } = pagination(req);
 	try {
 		const users = await User.findAndCount({
-			relations: ["userType"],
+			relations: ["role"],
 			where: { deleted: false },
 			order: { id: "DESC" },
 			take,
@@ -49,7 +49,7 @@ export const get = async (req: Request, res: Response) => {
 		const id: number = Number.parseInt(req.params.id);
 		const user = await User.findOne({
 			where: { id },
-			relations: ["userType"],
+			relations: ["role"],
 		});
 		if (!user) return res.status(404).json({ message: "User does not exist" });
 		const { password, ...rta } = user;
@@ -66,11 +66,11 @@ export const update = async (req: Request, res: Response) => {
 		const id: number = Number.parseInt(req.params.id);
 		const user = await User.findOneBy({ id });
 		if (!user) return res.status(404).json({ message: "User does not exist" });
-		const { name, email, userType } = req.body;
+		const { name, email, role } = req.body;
 		const body = {
 			name,
 			email,
-			userType,
+			role,
 		};
 		User.update({ id }, body);
 		return res.sendStatus(204);
