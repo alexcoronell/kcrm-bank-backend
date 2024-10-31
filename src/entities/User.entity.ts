@@ -18,7 +18,6 @@ import { UserType } from "./UserType.entity";
 import { IsBoolean, IsEmail, IsInt, isInt, IsNotEmpty, IsOptional, IsString, Min, MinLength } from "class-validator";
 
 @Entity()
-@Unique(["email"])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
