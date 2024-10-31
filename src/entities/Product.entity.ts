@@ -21,6 +21,9 @@ export class Product extends BaseEntity {
   @Column({ name: "rate_required", type: "boolean", nullable: false, default: false})
   rateRequired: boolean
 
+  @Column({ name: "franquise_required", type: "boolean", nullable: false, default: false})
+  franchiseRequired: boolean
+
   @CreateDateColumn({
     name: "created_at",
     type: "timestamp",

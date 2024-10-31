@@ -8,9 +8,11 @@ import pagination from "../helpers/pagination.helper";
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const { name } = req.body;
+    const { name, rateRequired, franchiseRequired } = req.body;
     const product = new Product();
     product.name = name;
+    product.rateRequired = rateRequired
+    product.franchiseRequired = franchiseRequired
     await product.save();
     return res.status(201).json(product);
   } catch (e) {
@@ -72,8 +74,8 @@ export const update = async (req: Request, res: Response) => {
     const product = await Product.findOneBy({ id });
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
-    const { name, active } = req.body;
-    await Product.update({ id }, { name: name.toUpperCase(), active });
+    const { name, rateRequired, franchiseRequired, active } = req.body;
+    await Product.update({ id }, { name, rateRequired, franchiseRequired, active });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
