@@ -5,21 +5,23 @@ import morgan from "morgan";
 import "dotenv/config";
 
 /* Routes */
-import franchiseRoutes from "./routes/franchise.router";
-import loginRoutes from "./routes/login.router";
-import saleRoutes from "./routes/sale.route";
-import userRoutes from "./routes/user.router";
-import userTypeRoutes from "./routes/userType.route";
+import franchiseRouter from "./routes/franchise.router";
+import loginRouter from "./routes/login.router";
+import productRouter from "./routes/product.router";
+import saleRouter from "./routes/sale.router";
+import userRouter from "./routes/user.router";
+import userTypeRouter from "./routes/userType.router";
 
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use(userRoutes);
-app.use(userTypeRoutes);
-app.use(franchiseRoutes);
-app.use(saleRoutes);
-app.use(loginRoutes);
+app.use(franchiseRouter);
+app.use(loginRouter);
+app.use(productRouter);
+app.use(userRouter);
+app.use(userTypeRouter);
+app.use(saleRouter);
 
 export default app;
