@@ -32,13 +32,13 @@ export const login = async (req: Request, res: Response) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
-          maxAge: 1000 * 60 * 60,
+          maxAge: 120,
         })
         .cookie("refresh_token", refreshToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
-          maxAge: 1000 * 60 * 60,
+          maxAge: 60 * 60 * 8,
         })
         .send({ message: "OK", accessToken, refreshToken, isAdmin });
     }
@@ -78,7 +78,7 @@ const generateJWT = (user: User, refresh = false) => {
   const { id, role } = user;
   const { isAdmin } = role as unknown as Role;
   const secret = refresh ? config.jwtSecretRefresh : config.jwtSecret;
-  const expiresIn = refresh ? config.jwtRefreshExpiresIn : config.jwtExpiresIn;
+  const expiresIn = refresh ? config.jwtRefreshExpiresIn : Number.parseInt(config.jwtExpiresIn as string);
   const payload: PayloadToken = { user: id, isAdmin };
   return {
     token: jwt.sign(payload, secret as string, { expiresIn }),
