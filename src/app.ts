@@ -9,29 +9,19 @@ import "dotenv/config";
 import config from "./config/config";
 
 /* Routes */
-import franchiseRouter from "./routes/franchise.router";
-import authRouter from "./routes/auth.router";
-import productRouter from "./routes/product.router";
-import roleRouter from "./routes/role.router";
-import saleRouter from "./routes/sale.router";
-import userRouter from "./routes/user.router";
+import routes from "./routes";
 
 const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: config.mode === 'dev' ? "http://localhost:5173" : "*",
+    origin: config.mode === "dev" ? "http://localhost:5173" : "*",
     credentials: true,
   })
 );
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use(franchiseRouter);
-app.use(authRouter);
-app.use(productRouter);
-app.use(roleRouter);
-app.use(userRouter);
-app.use(saleRouter);
+app.use(config.apiRoute as string, routes);
 
 export default app;
