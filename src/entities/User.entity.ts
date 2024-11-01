@@ -68,7 +68,7 @@ export class User extends BaseEntity {
   /************** RELATIONS **************/
   @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({ name: "role" })
-  role: number;
+  role: Role;
 
   @OneToMany(() => Sale, (sale) => sale.createdBy)
   createdSales: Sale[];

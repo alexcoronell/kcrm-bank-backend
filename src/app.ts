@@ -7,7 +7,7 @@ import "dotenv/config";
 
 /* Routes */
 import franchiseRouter from "./routes/franchise.router";
-import loginRouter from "./routes/login.router";
+import authRouter from "./routes/auth.router";
 import productRouter from "./routes/product.router";
 import roleRouter from "./routes/role.router";
 import saleRouter from "./routes/sale.router";
@@ -20,7 +20,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(franchiseRouter);
-app.use(loginRouter);
+app.use(authRouter);
 app.use(productRouter);
 app.use(roleRouter);
 app.use(userRouter);
