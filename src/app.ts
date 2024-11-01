@@ -5,6 +5,9 @@ import morgan from "morgan";
 import helmet from "helmet";
 import "dotenv/config";
 
+/* Config */
+import config from "./config/config";
+
 /* Routes */
 import franchiseRouter from "./routes/franchise.router";
 import authRouter from "./routes/auth.router";
@@ -15,7 +18,12 @@ import userRouter from "./routes/user.router";
 
 const app = express();
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: config.mode === 'dev' ? "http://localhost:5173" : "*",
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());

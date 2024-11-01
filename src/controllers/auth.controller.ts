@@ -12,10 +12,13 @@ import type { TokenDto } from "../dtos/token.dto";
 /* Interfaces */
 import type { PayloadToken } from "../interfaces/PayloadToken.interface";
 
+/* Config */
 import config from "../config/config";
 
+/* Helpers */
+import { setCookies } from "../helpers/setCookies";
+
 export const login = async (req: Request, res: Response) => {
-  console.log(req.body)
   try {
     const { email, password } = req.body;
     const user = await User.findOne({
@@ -27,20 +30,8 @@ export const login = async (req: Request, res: Response) => {
     if (user && isMatch) {
       const { token: accessToken, isAdmin } = generateJWT(user);
       const { token: refreshToken } = generateJWT(user, true);
-      return res
-        .cookie("access_token", accessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-          maxAge: 120,
-        })
-        .cookie("refresh_token", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-          maxAge: 60 * 60 * 8,
-        })
-        .send({ message: "OK", accessToken, refreshToken, isAdmin });
+      setCookies(res, accessToken, refreshToken)
+      return res.send({ message: "OK", accessToken, refreshToken, isAdmin });
     }
     return res.status(404).json({ message: "Invalid Login" });
   } catch (e) {
