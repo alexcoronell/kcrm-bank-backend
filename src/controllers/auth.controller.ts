@@ -28,10 +28,10 @@ export const login = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ message: "Invalid Login" });
     const isMatch = await bcrypt.compare(password, user.password);
     if (user && isMatch) {
-      const { token: accessToken, isAdmin } = generateJWT(user);
+      const { token: accessToken, isAdmin, publicUser } = generateJWT(user);
       const { token: refreshToken } = generateJWT(user, true);
       setCookies(res, accessToken, refreshToken)
-      return res.send({ message: "OK", accessToken, refreshToken, isAdmin });
+      return res.send({ message: "OK", isAdmin, publicUser });
     }
     return res.status(404).json({ message: "Invalid Login" });
   } catch (e) {
@@ -71,8 +71,10 @@ const generateJWT = (user: User, refresh = false) => {
   const secret = refresh ? config.jwtSecretRefresh : config.jwtSecret;
   const expiresIn = refresh ? config.jwtRefreshExpiresIn : Number.parseInt(config.jwtExpiresIn as string);
   const payload: PayloadToken = { user: id, isAdmin };
+  const { password, ...publicUser } = user;
   return {
     token: jwt.sign(payload, secret as string, { expiresIn }),
     isAdmin,
+    publicUser
   };
 };
