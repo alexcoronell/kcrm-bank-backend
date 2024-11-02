@@ -12,7 +12,7 @@ export const checkJwt(req: Request, res: Response, next: NextFunction) => {
         jwtPayload = jwt.verify(token, jwtSecret)
         res.locals.jwtPayload = jwtPayload
     } catch(e) {
-        return res.status(401).send();
+        return res.status(401).json({ok: false, message: "Invealid Token"});
     }
 
     const { userId, email } = jwtPayload;
