@@ -16,7 +16,7 @@ import type { PayloadToken } from "../interfaces/PayloadToken.interface";
 import config from "../config/config";
 
 /* Helpers */
-import { setCookies } from "../helpers/setCookies";
+import { setCookies, clearCookies } from "../helpers/cookies.helper";
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
       const { token: accessToken, isAdmin, publicUser } = generateJWT(user);
       const { token: refreshToken } = generateJWT(user, true);
       setCookies(res, accessToken, refreshToken)
-      return res.send({ message: "OK", isAdmin, publicUser });
+      return res.status(200).send({ message: "OK", isAdmin, publicUser });
     }
     return res.status(404).json({ message: "Invalid Login" });
   } catch (e) {
@@ -41,10 +41,15 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const logout = async(req: Request, res: Response) => {
+  return res.status(200).json({message: "Complete logout"})
+}
+
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.headers.refresh as string;
 
   if (!refreshToken) {
+    clearCookies(res)
     return res.status(400).json({ message: "Something goes wrong!" });
   }
 

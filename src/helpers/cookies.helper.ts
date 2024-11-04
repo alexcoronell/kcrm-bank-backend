@@ -21,3 +21,8 @@ export const setCookies = (
       maxAge: 60 * 60 * 8,
     });
 };
+
+
+export const clearCookies = (res: Response) => {
+  res.clearCookie("access_token").clearCookie("refresh_token")
+}

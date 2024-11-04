@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { checkJwt } from "../middlewares/jwt.middleware";
 
-import { login, refreshToken } from "../controllers/auth.controller";
+import { login, logout, refreshToken } from "../controllers/auth.controller";
 
 const router = Router();
 
@@ -10,6 +10,10 @@ const router = Router();
 router.post("/login", (req, res) => {
   login(req, res);
 });
+
+router.get("/logout", (req, res) => {
+  logout(req, res);
+})
 
 router.post("/refresh-token", (req, res) => {
   refreshToken(req, res);
