@@ -1,6 +1,21 @@
-import type { Response } from "express";
+import type { Request, Response } from "express";
+import type { CookieOptions } from "express";
 
 import config from "../config/config";
+
+const accessTokenOptions: CookieOptions = {
+  httpOnly: config.mode === "prod",
+  secure: config.mode === "prod",
+  sameSite: "strict",
+  maxAge: 120000,
+};
+
+const refreshTokenOptions: CookieOptions = {
+  httpOnly: config.mode === "prod",
+  secure: config.mode === "prod",
+  sameSite: "strict",
+  maxAge: 28800000,
+};
 
 export const setCookies = (
   res: Response,
@@ -8,21 +23,20 @@ export const setCookies = (
   refreshToken: string
 ) => {
   res
-    .cookie("access_token", accessToken, {
-      httpOnly: config.mode === "prod",
-      secure: false,
-      sameSite: "strict",
-      maxAge: 1000 * 120,
-    })
-    .cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: config.mode === "prod",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 8,
-    });
+    .cookie("access_token", accessToken, accessTokenOptions)
+    .cookie("refresh_token", refreshToken, refreshTokenOptions);
 };
 
+export const setAccessTokenCookie = (res: Response, accessToken: string) => {
+  res.cookie("access_token", accessToken, accessTokenOptions);
+};
+
+export const getCookies = async (req: Request) => {
+  const accessToken = await req.cookies.access_token;
+  const refreshToken = await req.cookies.refresh_token;
+  return { accessToken, refreshToken };
+};
 
 export const clearCookies = (res: Response) => {
-  res.clearCookie("access_token").clearCookie("refresh_token")
-}
+  res.clearCookie("access_token").clearCookie("refresh_token");
+};

@@ -16,7 +16,12 @@ import type { PayloadToken } from "../interfaces/PayloadToken.interface";
 import config from "../config/config";
 
 /* Helpers */
-import { setCookies, clearCookies } from "../helpers/cookies.helper";
+import {
+  setCookies,
+  setAccessTokenCookie,
+  getCookies,
+  clearCookies,
+} from "../helpers/cookies.helper";
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -30,7 +35,7 @@ export const login = async (req: Request, res: Response) => {
     if (user && isMatch) {
       const { token: accessToken, isAdmin, publicUser } = generateJWT(user);
       const { token: refreshToken } = generateJWT(user, true);
-      setCookies(res, accessToken, refreshToken)
+      setCookies(res, accessToken, refreshToken);
       return res.status(200).send({ message: "OK", isAdmin, publicUser });
     }
     return res.status(404).json({ message: "Invalid Login" });
@@ -41,15 +46,15 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = async(req: Request, res: Response) => {
-  return res.status(200).json({message: "Complete logout"})
-}
+export const logout = async (req: Request, res: Response) => {
+  return res.status(200).json({ message: "Complete logout" });
+};
 
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.headers.refresh as string;
 
   if (!refreshToken) {
-    clearCookies(res)
+    clearCookies(res);
     return res.status(400).json({ message: "Something goes wrong!" });
   }
 
@@ -70,16 +75,49 @@ export const refreshToken = async (req: Request, res: Response) => {
   }
 };
 
+export const verifySession = async (req: Request, res: Response) => {
+  const { accessToken, refreshToken } = await getCookies(req);
+  if (!accessToken && !refreshToken) {
+    return res
+      .status(401)
+      .json({ session: false, message: "Token does't exist" });
+  }
+
+  if (!accessToken && refreshToken) {
+    const refreshTokenDecoded = jwt.verify(
+      refreshToken,
+      config?.jwtSecretRefresh as string
+    );
+    const { user: id } = refreshTokenDecoded as PayloadToken;
+    try {
+      const user = await User.findOne({
+        relations: ["role"],
+        where: { id, deleted: false, active: true },
+      });
+      if(!user) {
+        return res.status(401).json({message: "Invalid Token"})
+      }
+      const { token: accessToken, isAdmin, publicUser } = generateJWT(user);
+      setAccessTokenCookie(res, accessToken)
+      return res.status(200).send({ message: "OK", isAdmin, publicUser });
+    } catch(e) {
+      console.error(e)
+    }
+  }
+};
+
 const generateJWT = (user: User, refresh = false) => {
   const { id, role } = user;
   const { isAdmin } = role as unknown as Role;
   const secret = refresh ? config.jwtSecretRefresh : config.jwtSecret;
-  const expiresIn = refresh ? config.jwtRefreshExpiresIn : Number.parseInt(config.jwtExpiresIn as string);
+  const expiresIn = refresh
+    ? config.jwtRefreshExpiresIn
+    : Number.parseInt(config.jwtExpiresIn as string);
   const payload: PayloadToken = { user: id, isAdmin };
-  const { password, ...publicUser } = user;
+  const { password, active, role: roleTemp, deleted, createAt, updateAt, ...publicUser } = user;
   return {
     token: jwt.sign(payload, secret as string, { expiresIn }),
     isAdmin,
-    publicUser
+    publicUser,
   };
 };

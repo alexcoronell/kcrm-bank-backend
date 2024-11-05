@@ -128,7 +128,6 @@ export const deactivate = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
 	try {
 		const id: number = Number.parseInt(req.params.id);
-		console.log(id);
 		const user = await User.findOneBy({ id });
 		if (!user) return res.status(404).json({ message: "User does not exist" });
 		await User.update({ id }, { deleted: true });
