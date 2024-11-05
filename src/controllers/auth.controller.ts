@@ -102,6 +102,7 @@ export const verifySession = async (req: Request, res: Response) => {
       return res.status(200).send({ message: "OK", isAdmin, publicUser });
     } catch(e) {
       console.error(e)
+      return res.status(401).json({message: "Invalid Token"})
     }
   }
 };

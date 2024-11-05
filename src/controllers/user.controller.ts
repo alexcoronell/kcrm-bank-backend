@@ -17,7 +17,7 @@ export const create = async (req: Request, res: Response) => {
 		user.password = hashPassword;
 		user.role = role;
 		await user.save();
-		return res.json(user);
+		return res.status(201).json({message: "User saved"});
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });
@@ -67,13 +67,9 @@ export const update = async (req: Request, res: Response) => {
 		const user = await User.findOneBy({ id });
 		if (!user) return res.status(404).json({ message: "User does not exist" });
 		const { name, email, role } = req.body;
-		const body = {
-			name,
-			email,
-			role,
-		};
-		User.update({ id }, body);
-		return res.sendStatus(204);
+		User.merge(user, {name, email, role})
+		User.save(user);
+		return res.status(204).json({message: "User updated"});
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });
@@ -88,38 +84,12 @@ export const updatePassword = async (req: Request, res: Response) => {
 		if (!user) return res.status(404).json({ message: "User does not exist" });
 		const { password } = req.body;
 		const hashPassword = await bcrypt.hash(password, 10);
-		await User.update({ id }, { password: hashPassword });
-		return res.sendStatus(204);
+		await User.merge(user, { password: hashPassword });
+		await User.save(user)
+		return res.status(204).json({message: "Password Updated"});
 	} catch (e) {
 		if (e instanceof Error) {
-			return res.status(500).json({ message: e.message });
-		}
-	}
-};
-
-export const activate = async (req: Request, res: Response) => {
-	try {
-		const id: number = Number.parseInt(req.params.id);
-		const user = await User.findOneBy({ id });
-		if (!user) return res.status(404).json({ message: "User does not exist" });
-		await User.update({ id }, { active: true });
-		return res.sendStatus(204);
-	} catch (e) {
-		if (e instanceof Error) {
-			return res.status(500).json({ message: e.message });
-		}
-	}
-};
-
-export const deactivate = async (req: Request, res: Response) => {
-	try {
-		const id: number = Number.parseInt(req.params.id);
-		const user = await User.findOneBy({ id });
-		if (!user) return res.status(404).json({ message: "User does not exist" });
-		await User.update({ id }, { active: false });
-		return res.sendStatus(204);
-	} catch (e) {
-		if (e instanceof Error) {
+			console.log(e)
 			return res.status(500).json({ message: e.message });
 		}
 	}
@@ -131,7 +101,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 		const user = await User.findOneBy({ id });
 		if (!user) return res.status(404).json({ message: "User does not exist" });
 		await User.update({ id }, { deleted: true });
-		return res.sendStatus(204);
+		return res.status(204).json({message: "User deleted"});
 	} catch (e) {
 		if (e instanceof Error) {
 			return res.status(500).json({ message: e.message });

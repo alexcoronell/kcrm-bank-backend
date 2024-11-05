@@ -4,9 +4,7 @@ const router = Router();
 
 /* Controllers */
 import {
-  activate,
   create,
-  deactivate,
   deleteUser,
   get,
   getAll,
@@ -22,7 +20,7 @@ router.get("/", (req, res) => {
   getAll(req, res);
 });
 
-router.put("/password/:id", (req, res) => {
+router.patch("/password/:id", (req, res) => {
   updatePassword(req, res);
 });
 
@@ -30,16 +28,8 @@ router.get("/:id", (req, res) => {
   get(req, res);
 });
 
-router.put("/:id", (req, res) => {
+router.patch("/:id", (req, res) => {
   update(req, res);
-});
-
-router.put("/activate/:id", (req, res) => {
-  activate(req, res);
-});
-
-router.put("/deactivate/:id", (req, res) => {
-  deactivate(req, res);
 });
 
 router.delete("/:id", (req, res) => {
