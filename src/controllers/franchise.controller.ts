@@ -8,9 +8,11 @@ import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
-	const franchiseName = await Franchise.findOneBy({ name: name.toUpperCase()});
-	if (franchiseName)
-	  return res.status(409).json({ message: "Name is already taken" });
+    const franchiseName = await Franchise.findOneBy({
+      name: name.toUpperCase(),
+    });
+    if (franchiseName)
+      return res.status(409).json({ message: "Name is already taken" });
     const franchise = new Franchise();
     franchise.name = name.toUpperCase();
     await franchise.save();
@@ -78,6 +80,10 @@ export const update = async (req: Request, res: Response) => {
     await Franchise.update({ id }, { name: name.toUpperCase(), active });
     return res.sendStatus(204);
   } catch (e) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const { code } = e as any;
+    if (code === "23505")
+      return res.status(409).json({ message: "Franchise already exists" });
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
     }
