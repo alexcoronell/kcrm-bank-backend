@@ -10,6 +10,15 @@ import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
 	try {
 		const { name, email, password, role } = req.body;
+		try {
+			const { email } = req.body;
+			const user = await User.findOneBy({email});
+			if(user) return res.status(409).json({ message: 'Username already taken' });
+		}catch (e) {
+			if (e instanceof Error) {
+				return res.status(500).json({ message: e.message });
+			}
+		}
 		const user = new User();
 		const hashPassword = await bcrypt.hash(password, 10);
 		user.name = name;
