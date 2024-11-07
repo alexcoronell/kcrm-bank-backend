@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import type { Request, Response } from "express";
+import { Not, Equal } from "typeorm";
 
 /* Entities */
 import { User } from "../entities/User.entity";
@@ -76,14 +77,16 @@ export const update = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ id });
     if (!user) return res.status(404).json({ message: "User does not exist" });
     const { name, email, role } = req.body;
-    User.merge(user, { name, email, role });
-    User.save(user);
+    const checkEmail = await User.findBy({
+      id: Not(id),
+      email: Equal(email)
+    })
+    if(checkEmail.length > 0) return res.status(409).json({ message: "Email already exists" });
+    User.update(id, { name, email, role });
     return res.status(204).json({ message: "User updated" });
   } catch (e) {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const { code } = e as any;
-    if (code === "23505")
-      return res.status(409).json({ message: "Role already exists" });
     if (e instanceof Error) {
       return res.status(500).json({ message: e.message });
     }

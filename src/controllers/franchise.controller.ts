@@ -77,7 +77,7 @@ export const update = async (req: Request, res: Response) => {
     if (!franchise)
       return res.status(404).json({ message: "Franchise does not exist" });
     const { name, active } = req.body;
-    await Franchise.update({ id }, { name: name.toUpperCase(), active });
+    await Franchise.update(id, {name: name.toUpperCase(), active})
     return res.sendStatus(204);
   } catch (e) {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
