@@ -15,7 +15,7 @@ export class Franchise extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ type: "varchar", length: "50", nullable: false })
+	@Column({ type: "varchar", length: "50", nullable: false, unique: true })
 	name: string;
 
 	@CreateDateColumn({

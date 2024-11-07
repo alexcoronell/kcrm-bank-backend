@@ -9,6 +9,8 @@ import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
   try {
     const { name, rateRequired, franchiseRequired } = req.body;
+    const nameProduct = await Product.countBy({name})
+    if(nameProduct) return res.status(409).json({ message: "Product already exists" });
     const product = new Product();
     product.name = name;
     product.rateRequired = rateRequired

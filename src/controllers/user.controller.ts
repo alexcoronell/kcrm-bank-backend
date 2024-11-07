@@ -13,7 +13,7 @@ export const create = async (req: Request, res: Response) => {
 		try {
 			const { email } = req.body;
 			const user = await User.findOneBy({email});
-			if(user) return res.status(409).json({ message: 'Username already taken' });
+			if(user) return res.status(409).json({ message: 'Email already taken' });
 		}catch (e) {
 			if (e instanceof Error) {
 				return res.status(500).json({ message: e.message });

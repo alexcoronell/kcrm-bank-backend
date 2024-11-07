@@ -27,7 +27,7 @@ export class User extends BaseEntity {
   @IsString()
   name: string;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: "varchar", length: 50, unique: true })
   @IsNotEmpty({message: "email is required"})
   @IsEmail()
   email: string;

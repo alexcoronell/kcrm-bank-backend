@@ -9,6 +9,8 @@ import pagination from "../helpers/pagination.helper";
 export const create = async (req: Request, res: Response) => {
 	try {
 		const { name, isAdmin } = req.body;
+		const roleName = await Role.findOneBy({name})
+		if(roleName) return res.status(409).json({ message: "Role already exists" });
 		const role = new Role();
 		role.name = name;
 		role.isAdmin = isAdmin;
