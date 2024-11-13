@@ -24,7 +24,7 @@ export class Sale extends BaseEntity {
 	@Column({ name: "quota_requested" })
 	quotaRequested: number;
 
-	@Column()
+	@Column({nullable: true})
 	rate: string;
 
 	@CreateDateColumn({
