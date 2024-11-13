@@ -16,6 +16,7 @@ import type { PayloadToken } from "../interfaces/PayloadToken.interface";
 import config from "../config/config";
 
 /* Helpers */
+import generateJWT from "../helpers/generateJWT.helper";
 import {
   setCookies,
   setAccessTokenCookie,
@@ -105,20 +106,4 @@ export const verifySession = async (req: Request, res: Response) => {
       return res.status(401).json({message: "Invalid Token"})
     }
   }
-};
-
-const generateJWT = (user: User, refresh = false) => {
-  const { id, role } = user;
-  const { isAdmin } = role as unknown as Role;
-  const secret = refresh ? config.jwtSecretRefresh : config.jwtSecret;
-  const expiresIn = refresh
-    ? config.jwtRefreshExpiresIn
-    : Number.parseInt(config.jwtExpiresIn as string);
-  const payload: PayloadToken = { user: id, isAdmin };
-  const { password, active, role: roleTemp, deleted, createAt, updateAt, ...publicUser } = user;
-  return {
-    token: jwt.sign(payload, secret as string, { expiresIn }),
-    isAdmin,
-    publicUser,
-  };
 };

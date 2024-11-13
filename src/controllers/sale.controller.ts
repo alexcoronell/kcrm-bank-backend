@@ -84,7 +84,6 @@ export const update = async (req: Request, res: Response) => {
 export const remove = async (req: Request, res: Response) => {
 	try {
 		const id: number = Number.parseInt(req.params.id);
-		console.log(id);
 		const sale = await Sale.findOneBy({ id });
 		if (!sale) return res.status(404).json({ message: "Sale does not exist" });
 		await Sale.update({ id }, { deleted: true });

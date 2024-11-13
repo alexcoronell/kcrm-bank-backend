@@ -105,7 +105,6 @@ export const updatePassword = async (req: Request, res: Response) => {
     return res.status(204).json({ message: "Password Updated" });
   } catch (e) {
     if (e instanceof Error) {
-      console.log(e);
       return res.status(500).json({ message: e.message });
     }
   }
