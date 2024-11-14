@@ -100,7 +100,8 @@ export const remove = async (req: Request, res: Response) => {
     const product = await Product.findOneBy({ id });
     if (!product)
       return res.status(404).json({ message: "Product does not exist" });
-    await Product.update({ id }, { deleted: true });
+    const name = `${product?.name} - deleted - ${id}`;
+    await Product.update({ id }, { name, deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
