@@ -109,7 +109,8 @@ export const remove = async (req: Request, res: Response) => {
     const role = await Role.findOneBy({ id });
     if (!role)
       return res.status(404).json({ message: "User Type does not exist" });
-    await Role.update({ id }, { deleted: true });
+    const name = `${role?.name} - deleted - ${id}`;
+    await Role.update({ id }, { name, deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
