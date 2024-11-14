@@ -96,7 +96,8 @@ export const remove = async (req: Request, res: Response) => {
     const franchise = await Franchise.findOneBy({ id });
     if (!franchise)
       return res.status(404).json({ message: "Franchise does not exist" });
-    await Franchise.update({ id }, { deleted: true });
+    const name = `${franchise?.name} - deleted - ${id}`
+    await Franchise.update({ id }, { name, deleted: true });
     return res.sendStatus(204);
   } catch (e) {
     if (e instanceof Error) {
