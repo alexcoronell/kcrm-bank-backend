@@ -27,6 +27,7 @@ export const authMiddleware = async (
     return next();
   } catch (e) {
     const decodedRefreshToken = jwt.verify(refreshToken, jwtSecretRefresh);
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const { user: id } = decodedRefreshToken as any;
     const user = await User.findOneOrFail({
       where: { id },

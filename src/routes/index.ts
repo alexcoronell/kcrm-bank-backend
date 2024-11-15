@@ -1,6 +1,8 @@
 import { Router } from "express";
 
+/* Middlewares */
 import { authMiddleware } from "../middlewares/auth.middleware";
+import { adminMiddleware } from "../middlewares/admin.middleware";
 
 import authRouter from "./auth.router";
 import franchiseRouter from "./franchise.router";
@@ -14,8 +16,8 @@ const router = Router();
 router.use("/auth", authRouter);
 router.use("/franchises", authMiddleware, franchiseRouter);
 router.use("/products", authMiddleware, productRouter);
-router.use("/roles", authMiddleware, roleRouter);
 router.use("/sales", authMiddleware, saleRouter);
-router.use("/users", authMiddleware, userRouter);
+router.use("/roles", [authMiddleware, adminMiddleware], roleRouter);
+router.use("/users", [authMiddleware, adminMiddleware], userRouter);
 
 export default router;
