@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  Unique,
   Column,
   CreateDateColumn,
   Entity,
@@ -15,7 +14,14 @@ import { Exclude } from "class-transformer";
 
 import { Sale } from "./Sale.entity";
 import { Role } from "./Role.entity";
-import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Min, MinLength } from "class-validator";
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from "class-validator";
 
 @Entity()
 export class User extends BaseEntity {
@@ -23,12 +29,12 @@ export class User extends BaseEntity {
   id: number;
 
   @Column({ type: "varchar", length: "50" })
-  @IsNotEmpty({message: "name is required"})
+  @IsNotEmpty({ message: "name is required" })
   @IsString()
   name: string;
 
   @Column({ type: "varchar", length: 50, unique: true })
-  @IsNotEmpty({message: "email is required"})
+  @IsNotEmpty({ message: "email is required" })
   @IsEmail()
   email: string;
 
@@ -36,7 +42,7 @@ export class User extends BaseEntity {
   @Column({ type: "varchar", length: 255 })
   @IsNotEmpty()
   @IsString()
-  @MinLength(8, {message: "must contain at least 8 characters"})
+  @MinLength(8, { message: "must contain at least 8 characters" })
   password: string;
 
   @CreateDateColumn({

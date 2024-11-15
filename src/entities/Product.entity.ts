@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
+
 import { Sale } from "./Sale.entity";
 
 @Entity()
@@ -16,6 +18,8 @@ export class Product extends BaseEntity {
   id: number;
 
   @Column({ type: "varchar", length: "50", nullable: false, unique: true })
+  @IsNotEmpty({message: "name is required"})
+  @IsString()
   name: string;
 
   @Column({
@@ -24,6 +28,8 @@ export class Product extends BaseEntity {
     nullable: false,
     default: false,
   })
+  @IsOptional()
+  @IsBoolean()
   rateRequired: boolean;
 
   @Column({
@@ -32,6 +38,8 @@ export class Product extends BaseEntity {
     nullable: false,
     default: false,
   })
+  @IsOptional()
+  @IsBoolean()
   franchiseRequired: boolean;
 
   @CreateDateColumn({
