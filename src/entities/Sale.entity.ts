@@ -8,6 +8,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
+import { IsNotEmpty, IsNumber, IsPositive, IsOptional } from "class-validator";
 
 /* Entities */
 import { Franchise } from "./Franchise.entity";
@@ -22,10 +23,16 @@ export class Sale extends BaseEntity {
 	id: number;
 
 	@Column({ name: "quota_requested" })
+	@IsNotEmpty({ message: "Quote requested cannot be empty"})
+	@IsNumber({},{ message: "Quote requested must be a number"})
+	@IsPositive({message: "Quota requested must be a positive number"})
 	quotaRequested: number;
 
 	@Column({nullable: true})
-	rate: string;
+	@IsNumber({},{ message: "Rate must be a number"})
+	@IsPositive({message: "Rate must be a positive number"})
+	@IsOptional()
+	rate: number;
 
 	@CreateDateColumn({
 		name: "created_at",
@@ -50,6 +57,9 @@ export class Sale extends BaseEntity {
 		(user) => user.updatedSales,
 	)
 	@JoinColumn({ name: "updated_by_user" })
+	@IsNotEmpty({ message: "Updated By User cannot be empty"})
+	@IsNumber({},{ message: "Updated By User must be a number"})
+	@IsPositive({message: "Updated By User must be a positive number"})
 	updatedBy: number;
 
 	@ManyToOne(
@@ -57,6 +67,9 @@ export class Sale extends BaseEntity {
 		(franchise) => franchise.sales,
 	)
 	@JoinColumn({ name: "franchise" })
+	@IsNumber({},{ message: "Franchise must be a number"})
+	@IsPositive({message: "Franchise must be a positive number"})
+	@IsOptional()
 	franchise: number;
 
 	@ManyToOne(
@@ -64,6 +77,9 @@ export class Sale extends BaseEntity {
 		(user) => user.createdSales,
 	)
 	@JoinColumn({ name: "created_by_user" })
+	@IsNotEmpty({ message: "Created By User cannot be empty"})
+	@IsNumber({},{ message: "Created By User must be a number"})
+	@IsPositive({message: "Created By User must be a positive number"})
 	createdBy: number;
 
 	@ManyToOne(
@@ -71,5 +87,8 @@ export class Sale extends BaseEntity {
 		(product) => product.sales,
 	)
 	@JoinColumn({ name: "product" })
+	@IsNotEmpty({ message: "Product cannot be empty"})
+	@IsNumber({},{ message: "Product must be a number"})
+	@IsPositive({message: "Product must be a positive number"})
 	product: number;
 }
