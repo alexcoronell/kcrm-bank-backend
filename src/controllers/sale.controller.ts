@@ -55,7 +55,10 @@ export const getAll = async (req: Request, res: Response) => {
 export const get = async (req: Request, res: Response) => {
   try {
     const id: number = Number.parseInt(req.params.id);
-    const sale = await Sale.findOneBy({ id });
+    const sale = await Sale.findOne({
+      where: { id, deleted: false },
+      relations: ["franchise", "product", "createdBy", "updatedBy"],
+    });
     if (!sale) return res.status(404).json({ message: "Sale does not exist" });
     return res.json(sale);
   } catch (e) {
