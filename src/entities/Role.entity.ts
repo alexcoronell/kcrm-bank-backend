@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
+
 import { User } from "./User.entity";
 
 @Entity()
@@ -16,6 +18,8 @@ export class Role extends BaseEntity {
   id: number;
 
   @Column({ type: "varchar", length: "50", nullable: false, unique: true })
+  @IsNotEmpty({ message: "name is required" })
+  @IsString()
   name: string;
 
   @CreateDateColumn({
@@ -44,9 +48,13 @@ export class Role extends BaseEntity {
     type: "boolean",
     default: true,
   })
+  @IsBoolean()
+  @IsOptional()
   active: boolean;
 
   @Column({ type: "boolean", default: false })
+  @IsBoolean()
+  @IsOptional()
   deleted: boolean;
 
   /************** RELATIONS **************/
