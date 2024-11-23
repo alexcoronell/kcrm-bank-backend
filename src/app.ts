@@ -15,7 +15,10 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: config.mode === "dev" ? "http://localhost:5173" : "*",
+    origin:
+      config.mode === "dev"
+        ? ["http://localhost:5173", "http://localhost:4200"]
+        : "*",
     credentials: true,
   })
 );
